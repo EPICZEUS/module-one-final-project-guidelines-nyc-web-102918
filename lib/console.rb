@@ -16,4 +16,20 @@ class Console
 	def input
 		get.strip.downcase
 	end
+
+	def run
+		self.welcome
+		self.help
+		puts "Please enter command"
+		user_input = nil
+		until user_input == "exit"
+			user_input = input
+
+			if ["help", "user", "add", "view", "recommendations"].include?(input) && self.respond_to?(input)
+				self.public_send(input)
+			end
+		end
+
+		puts "Hope you enjoy your animes!"
+	end
 end
