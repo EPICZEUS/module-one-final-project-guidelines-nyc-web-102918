@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
     # iterate through my_animes to create a hash of {genre => [rating, rating, rating, etc]}
     # each iteration should check to see if the genre is already a key, if it is, push the rating,
     # if it's not, add the key and the rating
-    # 
+    # iterate through the hash using map and add the ratings and divide by the length of the value array
   end
 
   def get_recommendations_by_my_ratings
