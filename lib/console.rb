@@ -17,13 +17,29 @@ class Console
 		get.strip.downcase
 	end
 
+	def user
+		
+	end
+
+	def add
+		
+	end
+
+	def view
+		
+	end
+
+	def recommendations
+		
+	end
+
 	def run
 		self.welcome
 		self.help
 		puts "Please enter command"
 		user_input = nil
 		until user_input == "exit"
-			user_input = input
+			user_input = self.input
 
 			if ["help", "user", "add", "view", "recommendations"].include?(input) && self.respond_to?(input)
 				self.public_send(input)
