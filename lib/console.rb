@@ -6,6 +6,7 @@ class Console
 		puts "`add`             - adds an anime to your watched list"
 		puts "`view`            - views current anime list"
 		puts "`recommendations` - displays your curated recommendations"
+		puts "`genre`.          - displays recommendations based on a genre"
 		puts "`exit`            - exits the program"
 	end
 
@@ -49,11 +50,20 @@ class Console
 	end
 
 	def view
-		
+		@user.animes.each do |anime|
+			puts "Title: #{anime.title}"
+			puts "My score: #{@user.user_animes.find{|uanime| uanime.anime_id == anime.id }.user_rating}"
+			puts "Average rating: #{anime.score}"
+			puts
+		end
 	end
 
 	def recommendations
-		
+		# TODO
+	end
+
+	def genre
+		# TODO
 	end
 
 	def run
