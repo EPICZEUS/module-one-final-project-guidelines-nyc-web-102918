@@ -29,7 +29,7 @@ def pull_anime
 		data = JSON.parse(res)
 
 		data["data"].each do |anime|
-			puts anime["id"]
+			# puts anime["id"]
 			attributes = anime["attributes"]
 			ani = Anime.where(id: anime["id"].to_i).first
 			genres = RestClient.get(anime["relationships"]["genres"]["links"]["self"])
