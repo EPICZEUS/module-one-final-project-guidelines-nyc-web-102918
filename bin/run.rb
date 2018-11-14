@@ -4,4 +4,4 @@ ActiveRecord::Base.logger = nil
 
 Console.new.run
 
-puts "HELLO WORLD"
+# puts "HELLO WORLD"
