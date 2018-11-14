@@ -18,11 +18,34 @@ class Console
 	end
 
 	def user
-		
+		puts "Please enter your name:"
+		name = self.input
+		puts "Please enter your age:"
+		age = self,input
+
+		@user = User.find_or_create_by(name: name, age: age.to_i)
 	end
 
 	def add
-		
+		puts "Enter anime name:"
+		title = self.input
+		animes = Anime.where("title LIKE ?", title)
+		if animes.length > 1
+			animes.each_with_index do |anime, i|
+				puts "#{i + 1}. #{anime.title}"
+			end
+			puts "\nMultiple animes found, please specify by number:"
+			selection = self.input.to_i
+
+			anime = animes[selection - 1]
+		else
+			anime = animes.first
+		end
+
+		puts "Please enter your rating (1-5):"
+		rating = self.input.to_i
+
+		UserAnime.create(user_id: @user.id, anime_id: anime.id, user_rating: rating)
 	end
 
 	def view
