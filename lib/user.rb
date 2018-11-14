@@ -3,7 +3,10 @@ class User < ActiveRecord::Base
   has_many :animes, through: :users_animes
 
   def get_recommendations_by_genre(genre_name)
-    matched_genre = Anime.all.select {|anime| anime.genre.name == genre_name}
+    # Ruby version
+    # matched_genre = Anime.all.select {|anime| anime.genre.name == genre_name}
+    # ActiveRecord version:
+    matched_genre = Anime.joins(:genres).where("genres.name = ?", genre_name)
     recommendations = matched_genre.select {|anime| anime.score > 80.0}
     if self.age < 18
       recommendations.select {|anime| anime.age_rating == 'G' || anime.age_rating == 'PG'}
@@ -37,9 +40,13 @@ class User < ActiveRecord::Base
   def get_recommendations_by_my_ratings
     # call get_avg_genre_ratings
     avgs = get_avg_genre_ratings
-    # filter that down to any genres that have an average rating over x
-    avgs.select {|avg|}
+    # filter that down to any genres that have an average rating over 3
+    highest_avgs = avgs.select {|genre_avg| genre_avg.values[0] > 3}
     # run get_recommendations_by_genre for each of those genres
+    highest_genres = highest_avgs.map {|genre_avg| genre_avg.keys[0]}
+    # get the names for the genre ids
+    genre_objects = Genre.all.select {|genre| highest_genres.include?(genre.id)}
+    genre_objects.map {|genre| get_recommendations_by_genre(genre.name)}
   end
 
 end
