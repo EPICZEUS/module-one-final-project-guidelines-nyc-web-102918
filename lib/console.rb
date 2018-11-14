@@ -15,7 +15,7 @@ class Console
 	end
 
 	def input
-		get.strip.downcase
+		gets.strip.downcase
 	end
 
 	def user
