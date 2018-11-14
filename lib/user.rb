@@ -25,5 +25,4 @@ class User < ActiveRecord::Base
     highest_genres = highest_avgs.map {|genre_avg| genre_avg.keys[0]}
     highest_genres.each {|genre| get_recommendations_by_genre(genre)}
   end
-
 end

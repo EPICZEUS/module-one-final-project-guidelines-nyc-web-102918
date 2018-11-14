@@ -75,7 +75,7 @@ class Console
 	def genre
 		genres = Genre.all.map{|g| g.name }
 
-		genres.each{|genre| puts genre.name }
+		genres.each{|genre| puts genre }
 
 		puts
 		puts "Enter a genre:"
