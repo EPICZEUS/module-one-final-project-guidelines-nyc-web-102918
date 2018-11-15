@@ -3,7 +3,11 @@ class User < ActiveRecord::Base
   has_many :animes, through: :users_animes
 
   def get_my_avg_genre_ratings
-    big_decimal_avgs = UsersAnime.joins(anime: :genre).where("users_animes.user_id = ?", self.id).group('genres.name').average(:user_rating)
+    big_decimal_avgs = UsersAnime
+                       .joins(anime: :genre)
+                       .where("users_animes.user_id = ?", self.id)
+                       .group('genres.name')
+                       .average(:user_rating)
     big_decimal_avgs.map {|genre, big_decimal| {genre => big_decimal.truncate(2).to_f}}
   end
 
