@@ -122,7 +122,7 @@ class Console
 			return
 		end
 
-		@user.get_recommendations_by_genre(genre)
+		Anime.get_recommendations_by_genre(genre)
 	end
 
 	def run
