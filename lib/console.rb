@@ -22,16 +22,25 @@ class Console
 		puts "Please enter your name:"
 		name = self.input
 		puts "Please enter your age:"
-		age = self,input
+		age = self.input
 
 		@user = User.find_or_create_by(name: name, age: age.to_i)
 	end
 
 	def add
-		puts "Enter anime name:"
+		if @user.nil?
+			puts "Please enter your user first!"
+			return
+		end
+
+		puts "Enter anime name to add to watched list:"
 		title = self.input
-		animes = Anime.where("title LIKE ?", title)
-		if animes.length > 1
+		animes = Anime.where("title LIKE ?", "%#{title}%")
+
+		if animes.empty?
+			puts "No anime found by name: #{title}."
+			return
+		elsif animes.length > 1
 			animes.each_with_index do |anime, i|
 				puts "#{i + 1}. #{anime.title}"
 			end
@@ -46,36 +55,53 @@ class Console
 		puts "Please enter your rating (1-5):"
 		rating = self.input.to_i
 
-		UserAnime.create(user_id: @user.id, anime_id: anime.id, user_rating: rating)
+		UsersAnime.create(user_id: @user.id, anime_id: anime.id, user_rating: rating)
 	end
 
 	def view
+		# binding.pry
 		@user.animes.each do |anime|
 			puts "Title: #{anime.title}"
-			puts "My score: #{@user.user_animes.find{|uanime| uanime.anime_id == anime.id }.user_rating}"
+			puts "My score: #{@user.users_animes.find{|uanime| uanime.anime_id == anime.id }.user_rating}"
 			puts "Average rating: #{anime.score}"
 			puts
 		end
 	end
 
 	def recommendations
-		# TODO
+		@user.get_recommendations_by_my_ratings
 	end
 
 	def genre
-		# TODO
+		genres = Genre.all.map{|g| g.name }
+
+		genres.each{|genre| puts genre }
+
+		puts
+		puts "Enter a genre:"
+		genre = self.input.capitalize
+
+		if !genres.include?(genre)
+			puts "Invalid genre"
+			return
+		end
+
+		@user.get_recommendations_by_genre(genre)
 	end
 
 	def run
 		self.welcome
 		self.help
-		puts "Please enter command"
+		
 		user_input = nil
 		until user_input == "exit"
+			puts "Please enter command:"
 			user_input = self.input
 
-			if ["help", "user", "add", "view", "recommendations"].include?(input) && self.respond_to?(input)
-				self.public_send(input)
+			# binding.pry
+
+			if ["help", "user", "add", "view", "recommendations", "genre"].include?(user_input) && self.respond_to?(user_input)
+				self.send(user_input)
 			end
 		end
 
