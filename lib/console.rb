@@ -8,10 +8,12 @@ class Console
 		puts "`recommendations` - displays your curated recommendations"
 		puts "`genre`           - displays recommendations based on a genre"
 		puts "`exit`            - exits the program"
+		puts
 	end
 
 	def welcome
 		puts "Welcome to the Anime Recommendation CLI!"
+		puts
 	end
 
 	def input
@@ -23,6 +25,7 @@ class Console
 		name = self.input.capitalize
 		age = nil
 		until age >= 13
+			puts
 			puts "Please enter your age:"
 			age = self.input.to_i
 		end
