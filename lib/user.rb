@@ -29,6 +29,6 @@ class User < ActiveRecord::Base
     avgs = self.get_my_avg_genre_ratings
     highest_avgs = avgs.select {|genre_avg| genre_avg.values[0] > 3}
     highest_genres = highest_avgs.map {|genre_avg| genre_avg.keys[0]}
-    highest_genres.each {|genre| Anime.get_recommendations_by_genre(genre, self.age)}
+    highest_genres.each {|genre| self.get_recommendations_by_genre(genre, self.age)}
   end
 end
