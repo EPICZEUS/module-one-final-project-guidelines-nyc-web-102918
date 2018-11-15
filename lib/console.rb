@@ -23,6 +23,24 @@ class Console
 	def user
 		puts "Please enter your name:"
 		name = self.input.capitalize
+
+		answer = nil
+		loop do
+			if User.all.any?{|e| e.name == name }
+				puts "Existing user found, please enter login key:"
+				key = gets.strip
+
+				@user = User.find_by(name: name, key: key)
+
+				if @user.nil?
+					puts "Incorrect login. Is this a new user? (Y/N)"
+					answer = self.input
+
+					break if answer == "y"
+				end
+			end
+		end
+
 		age = nil
 		until age >= 13
 			puts
