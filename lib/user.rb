@@ -2,6 +2,20 @@ class User < ActiveRecord::Base
   has_many :users_animes
   has_many :animes, through: :users_animes
 
+  def get_recommendations_by_genre(genre_name)
+    my_anime_ids = self.animes.map{|anime| anime.id }
+
+    if self.age < 18
+      recommendations = self.joins(:genre).where("genres.name = ? AND animes.age_rating IN ('G','PG') AND animes.id NOT IN (?)", genre_name, my_anime_ids).order('score DESC').limit(5)
+    else
+      recommendations = self.joins(:genre).where("genres.name = ? AND animes.id NOT IN (?)", genre_name, my_anime_ids).order('score DESC').limit(5)
+    end
+    puts "Here are the top 5 animes in the #{genre_name} genre:"
+    recommendations.each_with_index do |rec, index|
+      puts "#{index + 1}. #{rec.title} - Score: #{rec.score}"
+    end
+  end
+
   def get_my_avg_genre_ratings
     big_decimal_avgs = UsersAnime
                        .joins(anime: :genre)

@@ -109,6 +109,11 @@ class Console
 	end
 
 	def genre
+		if @user.nil?
+			puts "Please enter your user first!"
+			return
+		end
+
 		genres = Genre.all.map{|g| g.name }
 
 		genres.each{|genre| puts genre }
@@ -122,7 +127,7 @@ class Console
 			return
 		end
 
-		Anime.get_recommendations_by_genre(genre)
+		@user.get_recommendations_by_genre(genre)
 	end
 
 	def run
