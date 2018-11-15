@@ -39,17 +39,18 @@ class Console
 			return
 		end
 
-		puts "Enter anime name to add to watched list:"
+		puts "Enter anime title to search for:"
 		title = self.input
 		animes = Anime.where("title LIKE ?", "%#{title}%")
 
 		if animes.empty?
-			puts "No anime found by name: #{title}."
+			puts "No anime found by title: #{title}."
 			return
 		else
 			animes.each_with_index do |anime, i|
 				puts "#{i + 1}. #{anime.title}"
 			end
+			puts
 			puts "\nPlease specify by number (0 to cancel):"
 			selection = self.input.to_i
 
@@ -64,7 +65,7 @@ class Console
 		end
 
 		rating = 0
-		until rating.between?(1,5)
+		until rating.between?(1, 5)
 			puts "Please enter your rating (1-5):"
 			rating = self.input.to_i
 		end
