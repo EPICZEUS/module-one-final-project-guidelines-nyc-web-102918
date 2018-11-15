@@ -8,7 +8,6 @@ class Console
 		puts "`recommendations` - displays your curated recommendations"
 		puts "`genre`           - displays recommendations based on a genre"
 		puts "`exit`            - exits the program"
-		puts
 	end
 
 	def welcome
@@ -25,8 +24,8 @@ class Console
 		name = self.input.capitalize
 
 		answer = nil
-		loop do
-			if User.all.any?{|e| e.name == name }
+		if User.all.any?{|e| e.name == name }
+			loop do
 				puts "Existing user found, please enter login key:"
 				key = gets.strip
 
@@ -37,18 +36,24 @@ class Console
 					answer = self.input
 
 					break if answer == "y"
+				else
+					return
 				end
 			end
 		end
-
-		age = nil
+		
+		age = 0
 		until age >= 13
 			puts
 			puts "Please enter your age:"
 			age = self.input.to_i
 		end
 
-		@user = User.find_or_create_by(name: name, age: age)
+		puts
+		puts "Please create login key:"
+		key = gets.strip
+
+		@user = User.find_or_create_by(name: name, age: age, key: key)
 	end
 
 	def add
@@ -59,7 +64,7 @@ class Console
 
 		puts "Enter anime title to search for:"
 		title = self.input
-		animes = Anime.where("title LIKE ?", "%#{title}%")
+		animes = Anime.where("title LIKE ?", "%#{title}%").select{|anime| !@user.animes.include?(anime) }
 
 		if animes.empty?
 			puts "No anime found by title: #{title}."
@@ -75,11 +80,6 @@ class Console
 			return if selection == 0
 
 			anime = animes[selection - 1]
-		end
-
-		if @user.animes.include?(anime)
-			puts "Anime already in list."
-			return
 		end
 
 		rating = 0
@@ -132,6 +132,10 @@ class Console
 		
 		user_input = nil
 		until user_input == "exit"
+			if @user
+				@user = User.find(@user.id)
+			end
+			
 			puts "Please enter command:"
 			user_input = self.input
 
