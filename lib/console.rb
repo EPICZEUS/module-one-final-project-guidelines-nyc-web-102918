@@ -20,7 +20,7 @@ class Console
 
 	def user
 		puts "Please enter your name:"
-		name = self.input
+		name = self.input.capitalize
 		age = nil
 		until age >= 13
 			puts "Please enter your age:"
