@@ -73,7 +73,6 @@ class Console
 			animes.each_with_index do |anime, i|
 				puts "#{i + 1}. #{anime.title}"
 			end
-			puts
 			puts "\nPlease specify by number (0 to cancel):"
 			selection = self.input.to_i
 
@@ -135,7 +134,7 @@ class Console
 			if @user
 				@user = User.find(@user.id)
 			end
-			
+
 			puts "Please enter command:"
 			user_input = self.input
 
